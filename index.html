@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JANASEVA TRACK | Public Grievance Portal</title>
+<style>
+:root{--navy:#14213d;--blue:#2457c5;--teal:#0f8b8d;--bg:#f4f7fb;--ink:#172033;--muted:#64748b;--line:#e5eaf2;--white:#fff;--red:#c2413b;--amber:#b7791f;--green:#16835d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.topbar{background:var(--navy);color:white;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-size:21px;font-weight:800;letter-spacing:.5px}.brand span{color:#65d6c5}.tagline{font-size:12px;color:#cbd5e1;margin-top:4px}
+.top-actions{display:flex;gap:8px;align-items:center}.top-actions button,.top-actions select{border:1px solid #52617c;background:#233454;color:white;border-radius:8px;padding:9px 12px}
+.shell{max-width:1180px;margin:26px auto;padding:0 18px}.welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:25px;margin:0 0 6px}h2{font-size:18px;margin:0 0 14px}.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.stat,.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:0 4px 15px rgba(25,45,80,.04)}
+.stat .label{font-size:12px;color:var(--muted)}.stat .num{font-size:28px;font-weight:800;margin-top:8px}.stat .hint{font-size:11px;color:var(--muted);margin-top:4px}
+.content{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.panel{margin-bottom:16px}
+.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:700;background:var(--blue);color:white}.btn.secondary{background:#eaf0ff;color:#2149a2}.btn.teal{background:var(--teal)}.btn.danger{background:#fff0ef;color:var(--red)}.btn.small{padding:7px 9px;font-size:12px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:12px;font-weight:700;color:#475569}
+input,select,textarea{width:100%;border:1px solid #d8e0eb;border-radius:8px;padding:10px;background:white;color:var(--ink)}textarea{min-height:85px;resize:vertical}
+.form-actions{grid-column:1/-1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:12px}th{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.pill{display:inline-block;border-radius:30px;padding:5px 8px;font-size:10px;font-weight:800;background:#edf2f7;color:#475569}.pill.pending{background:#fff4db;color:#946200}.pill.progress{background:#e8f0ff;color:#2855a6}.pill.resolved{background:#e5f7ef;color:#14744e}.pill.overdue{background:#ffebea;color:#b42318}.pill.escalated{background:#f4eaff;color:#7137a8}
+.notice{padding:11px 12px;border-radius:9px;background:#fff7e8;color:#855b0b;font-size:12px;margin:10px 0}.notice.info{background:#edf5ff;color:#27518f}.notice.success{background:#eaf8f0;color:#176b48}
+.list{display:flex;flex-direction:column;gap:9px}.item{border:1px solid var(--line);border-radius:10px;padding:11px}.item-title{font-weight:700;font-size:13px}.item-meta{font-size:11px;color:var(--muted);margin-top:5px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.hidden{display:none!important}.login-wrap{max-width:480px;margin:55px auto;padding:0 18px}.login-card{background:white;border:1px solid var(--line);border-radius:16px;padding:25px;box-shadow:0 12px 35px rgba(25,45,80,.08)}.login-card h1{margin-bottom:8px}
+.footer{text-align:center;color:var(--muted);font-size:11px;padding:22px}
+.modal-backdrop{position:fixed;inset:0;background:#10182899;display:flex;align-items:center;justify-content:center;padding:18px;z-index:5}.modal{background:white;border-radius:14px;padding:20px;max-width:520px;width:100%;max-height:85vh;overflow:auto}.history-line{border-left:2px solid #cbd5e1;padding:0 0 14px 13px;margin-left:5px;font-size:12px}.history-line:last-child{border-left-color:transparent}.history-line b{display:block;margin-bottom:4px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.content{grid-template-columns:1fr}}
+@media(max-width:480px){.grid{gap:8px}.stat{padding:12px}.stat .num{font-size:23px}form{grid-template-columns:1fr}.field.full,.form-actions{grid-column:1}.shell{margin:18px auto}.topbar{padding:14px}.brand{font-size:18px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div><div class="brand">JANASEVA <span>TRACK</span></div><div class="tagline" id="tagline">Public Grievance Tracking & Escalation Platform</div></div>
+  <div class="top-actions">
+    <button onclick="toggleLanguage()" id="langBtn">ಕನ್ನಡ</button>
+    <select id="roleSelect" aria-label="Demo role" onchange="switchRole(this.value)">
+      <option value="citizen">Citizen Demo</option><option value="officer">Officer Demo</option><option value="admin">Admin Demo</option>
+    </select>
+    <button onclick="logout()" id="logoutBtn" class="hidden">Exit</button>
+  </div>
+</header>
+
+<section id="loginView" class="login-wrap">
+  <div class="login-card">
+    <h1 id="loginTitle">Welcome to Janaseva Track</h1>
+    <p class="muted" id="loginDesc">A simple demo portal to register, monitor and follow up public grievances.</p>
+    <div class="field" style="margin:18px 0"><label id="roleLabel">Choose demo access</label>
+      <select id="loginRole"><option value="citizen">Citizen</option><option value="officer">Officer</option><option value="admin">Administrator</option></select>
+    </div>
+    <button class="btn" style="width:100%" onclick="enterApp()" id="enterBtn">Enter demo</button>
+    <div class="notice info">Demo mode: no real account or password is required. Choose a role to explore the prototype.</div>
+  </div>
+</section>
+
+<main id="appView" class="shell hidden">
+  <div class="welcome">
+    <div><h1 id="pageTitle">Citizen Dashboard</h1><div class="muted" id="pageSubtitle">Register a complaint and follow its progress.</div></div>
+    <div class="row"><span class="pill" id="rolePill">CITIZEN VIEW</span><button class="btn secondary small" onclick="loadSample()" id="sampleBtn">Load sample data</button></div>
+  </div>
+  <section class="grid">
+    <div class="stat"><div class="label" id="sTotal">Total complaints</div><div class="num" id="totalNum">0</div><div class="hint">All registered records</div></div>
+    <div class="stat"><div class="label" id="sPending">Pending</div><div class="num" id="pendingNum">0</div><div class="hint">Awaiting action</div></div>
+    <div class="stat"><div class="label" id="sOverdue">Overdue</div><div class="num" id="overdueNum">0</div><div class="hint">Deadline has passed</div></div>
+    <div class="stat"><div class="label" id="sResolved">Resolved</div><div class="num" id="resolvedNum">0</div><div class="hint">Marked as resolved</div></div>
+  </section>
+
+  <div class="content">
+    <div>
+      <section class="panel" id="registerPanel">
+        <h2 id="formTitle">Register a new complaint</h2>
+        <form id="complaintForm">
+          <div class="field full"><label for="cTitle">Complaint title *</label><input id="cTitle" required maxlength="90" placeholder="e.g. Damaged road near bus stop"></div>
+          <div class="field"><label for="cCategory">Category *</label><select id="cCategory" required><option value="">Select category</option><option>Road maintenance</option><option>Water supply</option><option>Sanitation</option><option>Street lighting</option><option>Public safety</option><option>Other</option></select></div>
+          <div class="field"><label for="cLocation">Location *</label><input id="cLocation" required placeholder="Area / ward / village"></div>
+          <div class="field full"><label for="cDescription">Description *</label><textarea id="cDescription" required placeholder="Explain the issue briefly"></textarea></div>
+          <div class="field"><label for="cDeadline">Follow-up deadline *</label><input id="cDeadline" type="date" required></div>
+          <div class="field"><label for="cContact">Contact (optional)</label><input id="cContact" placeholder="Phone or email"></div>
+          <div class="form-actions"><button class="btn" type="submit" id="submitBtn">Submit complaint</button><span class="muted">Fields marked * are required.</span></div>
+        </form>
+      </section>
+
+
+      <section class="panel" id="trackingPanel">
+        <h2>Track your complaint</h2>
+        <p class="muted">Enter the unique complaint ID you received after submitting your complaint.</p>
+        <div class="row" style="align-items:stretch">
+          <input id="trackId" placeholder="Example: JAN-2026-123456" style="flex:1;min-width:190px">
+          <button class="btn teal" type="button" onclick="trackById()">Track complaint</button>
+        </div>
+        <div id="trackingResult" style="margin-top:12px"></div>
+      </section>
+      <section class="panel">
+        <div class="row"><h2 id="complaintsTitle">Complaint records</h2><input id="searchBox" style="max-width:190px" placeholder="Search ID or title" oninput="render()" /></div>
+        <div class="table-wrap"><table><thead><tr><th>Complaint ID</th><th>Title</th><th>Status</th><th>Deadline</th><th>Action</th></tr></thead><tbody id="complaintRows"></tbody></table></div>
+        <div class="muted" style="margin-top:10px" id="tableNote">Use Track your complaint to look up a record by its unique ID. Select View for full action history.</div>
+      </section>
+    </div>
+    <div>
+      <section class="panel" id="adminPanel">
+        <h2 id="workTitle">Officer work queue</h2>
+        <div class="notice info" id="roleHelp">Choose a demo role from the top-right menu to explore each view.</div>
+        <div id="workQueue" class="list"></div>
+      </section>
+      <section class="panel">
+        <h2 id="alertsTitle">Reminders & alerts</h2>
+        <div id="alerts" class="list"><div class="muted">No reminders yet.</div></div>
+      </section>
+    </div>
+  </div>
+  <div class="notice info">Prototype note: this version stores data in this browser only. It is for hackathon demonstration, not for submitting real or emergency complaints.</div>
+</main>
+<div class="footer">JANASEVA TRACK · SOLVATHON 2026 · Student prototype</div>
+<div id="modalRoot"></div>
+
+<script>
+const KEY='janaseva_track_v1';
+let role='citizen', kannada=false;
+let complaints=loadData();
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return []}}
+function save(){localStorage.setItem(KEY,JSON.stringify(complaints))}
+function today(){return new Date().toISOString().slice(0,10)}
+function id(){return 'JAN-'+new Date().getFullYear()+'-'+Date.now().toString().slice(-8)+'-'+Math.floor(Math.random()*90+10)}
+function log(c,message){c.history=c.history||[];c.history.unshift({message,at:new Date().toLocaleString()})}
+function statusClass(c){if(c.escalated)return 'escalated';if(c.status==='Resolved')return 'resolved';if(c.deadline<today())return 'overdue';if(c.status==='In Progress')return 'progress';return 'pending'}
+function statusLabel(c){if(c.escalated)return 'Escalated';if(c.status==='Resolved')return 'Resolved';if(c.deadline<today())return 'Overdue';return c.status}
+function checkDeadlines(){
+  let changed=false;
+  complaints.forEach(c=>{
+    if(c.status==='Resolved')return;
+    c.history=c.history||[];
+    if(c.deadline<today()&&!c.overdueNotified){c.overdueNotified=true;log(c,'Deadline passed. Complaint marked overdue; follow-up reminder generated.');changed=true}
+    if(c.deadline<today()&&!c.escalated){c.escalated=true;c.assignedTo='Supervisor';log(c,'Automatically escalated to Supervisor because the complaint is overdue.');changed=true}
+  });
+  if(changed)save();
+}
+function enterApp(){role=document.getElementById('loginRole').value;document.getElementById('roleSelect').value=role;document.getElementById('loginView').classList.add('hidden');document.getElementById('appView').classList.remove('hidden');document.getElementById('logoutBtn').classList.remove('hidden');render()}
+function logout(){document.getElementById('appView').classList.add('hidden');document.getElementById('loginView').classList.remove('hidden');document.getElementById('logoutBtn').classList.add('hidden')}
+function switchRole(r){role=r;if(document.getElementById('appView').classList.contains('hidden'))document.getElementById('loginRole').value=r;else render()}
+function toggleLanguage(){kannada=!kannada;document.getElementById('langBtn').textContent=kannada?'English':'ಕನ್ನಡ';document.getElementById('tagline').textContent=kannada?'ಸಾರ್ವಜನಿಕ ದೂರುಗಳ ಟ್ರ್ಯಾಕಿಂಗ್ ಮತ್ತು ಮೇಲ್ಮನವಿ ವೇದಿಕೆ':'Public Grievance Tracking & Escalation Platform';document.getElementById('pageTitle').textContent=kannada?({citizen:'ನಾಗರಿಕರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',officer:'ಅಧಿಕಾರಿಯ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',admin:'ನಿರ್ವಾಹಕರ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್'}[role]):({citizen:'Citizen Dashboard',officer:'Officer Dashboard',admin:'Admin Dashboard'}[role]);}
+document.getElementById('complaintForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const c={id:id(),title:document.getElementById('cTitle').value.trim(),category:document.getElementById('cCategory').value,location:document.getElementById('cLocation').value.trim(),description:document.getElementById('cDescription').value.trim(),deadline:document.getElementById('cDeadline').value,contact:document.getElementById('cContact').value.trim(),status:'Pending',department:'Unassigned',assignedTo:'Unassigned',escalated:false,overdueNotified:false,createdAt:new Date().toLocaleString(),history:[]};
+ log(c,'Complaint registered by citizen.');complaints.unshift(c);save();e.target.reset();alert('Complaint submitted successfully! Your ID is '+c.id);render();
+});
+function render(){
+ checkDeadlines();
+ document.getElementById('roleSelect').value=role;
+ document.getElementById('pageTitle').textContent={citizen:'Citizen Dashboard',officer:'Officer Dashboard',admin:'Admin Dashboard'}[role];
+ document.getElementById('pageSubtitle').textContent={citizen:'Register a complaint and follow its progress.',officer:'Review assigned complaints and record action taken.',admin:'Monitor complaints, assign officers and manage escalation.'}[role];
+ document.getElementById('rolePill').textContent=role.toUpperCase()+' VIEW';
+ document.getElementById('registerPanel').classList.toggle('hidden',role!=='citizen');
+ document.getElementById('adminPanel').classList.toggle('hidden',role==='citizen');
+ document.getElementById('totalNum').textContent=complaints.length;
+ document.getElementById('pendingNum').textContent=complaints.filter(c=>c.status!=='Resolved').length;
+ document.getElementById('overdueNum').textContent=complaints.filter(c=>c.status!=='Resolved'&&c.deadline<today()).length;
+ document.getElementById('resolvedNum').textContent=complaints.filter(c=>c.status==='Resolved').length;
+ const q=(document.getElementById('searchBox').value||'').toLowerCase();
+ const visible=complaints.filter(c=>(c.id+' '+c.title).toLowerCase().includes(q));
+ document.getElementById('complaintRows').innerHTML=visible.map(c=>`<tr><td><b>${esc(c.id)}</b></td><td>${esc(c.title)}</td><td><span class="pill ${statusClass(c)}">${statusLabel(c)}</span></td><td>${esc(c.deadline)}</td><td><button class="btn secondary small" onclick="viewComplaint('${c.id}')">View</button></td></tr>`).join('')||'<tr><td colspan="5" class="muted">No complaints found. Submit a complaint or load sample data.</td></tr>';
+ const active=complaints.filter(c=>c.status!=='Resolved').sort((a,b)=>a.deadline.localeCompare(b.deadline));
+ document.getElementById('workQueue').innerHTML=role==='admin'?active.map(c=>adminCard(c)).join('')||'<div class="muted">No active complaints.</div>':active.map(c=>officerCard(c)).join('')||'<div class="muted">No assigned work yet.</div>';
+ const alerts=complaints.filter(c=>c.status!=='Resolved'&&(c.deadline<=today()||c.escalated));
+ document.getElementById('alerts').innerHTML=alerts.map(c=>`<div class="item"><div class="row"><b>${esc(c.id)}</b><span class="pill ${statusClass(c)}">${statusLabel(c)}</span></div><div class="item-meta">${esc(c.title)} · ${c.escalated?'Escalated to supervisor':'Follow-up required'}</div></div>`).join('')||'<div class="muted">No reminders or overdue alerts.</div>';
+}
+function adminCard(c){return `<div class="item"><div class="row"><div class="item-title">${esc(c.title)}</div><span class="pill ${statusClass(c)}">${statusLabel(c)}</span></div><div class="item-meta">${esc(c.id)} · ${esc(c.category)} · Deadline ${esc(c.deadline)}</div><div class="item-meta">Assigned: ${esc(c.assignedTo)} | Department: ${esc(c.department)}</div><div class="actions"><button class="btn secondary small" onclick="assign('${c.id}')">Assign</button><button class="btn secondary small" onclick="viewComplaint('${c.id}')">History</button></div></div>`}
+function officerCard(c){return `<div class="item"><div class="item-title">${esc(c.title)}</div><div class="item-meta">${esc(c.id)} · ${esc(c.location)} · ${statusLabel(c)}</div><div class="actions"><button class="btn small" onclick="updateStatus('${c.id}')">Update status</button><button class="btn secondary small" onclick="viewComplaint('${c.id}')">View</button></div></div>`}
+function assign(cid){const c=complaints.find(x=>x.id===cid);if(!c)return;const dept=prompt('Enter department:',c.department==='Unassigned'?'Public Works':c.department);if(dept===null)return;const officer=prompt('Enter responsible officer:',c.assignedTo==='Unassigned'?'Officer 01':c.assignedTo);if(officer===null)return;c.department=dept.trim()||'Unassigned';c.assignedTo=officer.trim()||'Unassigned';log(c,'Assigned to '+c.assignedTo+' in '+c.department+'.');save();render()}
+function updateStatus(cid){const c=complaints.find(x=>x.id===cid);if(!c)return;const s=prompt('Enter status: Pending, In Progress, or Resolved',c.status);if(!s)return;const allowed=['pending','in progress','resolved'];if(!allowed.includes(s.toLowerCase())){alert('Please enter Pending, In Progress, or Resolved.');return}c.status=s.toLowerCase().replace(/\b\w/g,x=>x.toUpperCase());const note=prompt('Enter action taken / update:','Officer reviewed the complaint.');log(c,'Status changed to '+c.status+'. '+(note||''));if(c.status==='Resolved')c.escalated=false;save();render()}
+function trackById(){
+ const field=document.getElementById('trackId');
+ const result=document.getElementById('trackingResult');
+ const wanted=field.value.trim().toUpperCase();
+ if(!wanted){result.innerHTML='<div class="notice">Please enter your complaint ID.</div>';return}
+ const c=complaints.find(x=>x.id.toUpperCase()===wanted);
+ if(!c){result.innerHTML='<div class="notice">No complaint was found with that ID in this browser. Check the ID or use the same browser where the complaint was registered.</div>';return}
+ const steps=[
+  {name:'Complaint registered',done:true},
+  {name:'Assigned to department',done:c.department!=='Unassigned'},
+  {name:'Officer started work',done:c.status==='In Progress'||c.status==='Resolved'},
+  {name:'Complaint resolved',done:c.status==='Resolved'}
+ ];
+ result.innerHTML=`<div class="item">
+  <div class="row"><b>${esc(c.title)}</b><span class="pill ${statusClass(c)}">${statusLabel(c)}</span></div>
+  <div class="item-meta">${esc(c.id)} · ${esc(c.category)} · ${esc(c.location)}</div>
+  <div class="item-meta">Department: ${esc(c.department)} · Officer: ${esc(c.assignedTo)}</div>
+  <div class="item-meta">Follow-up deadline: ${esc(c.deadline)}</div>
+  <h3 style="font-size:13px;margin:15px 0 10px">Progress timeline</h3>
+  ${steps.map((s,i)=>`<div class="history-line"><b>${s.done?'✓':'○'} ${s.name}</b><span class="muted">${s.done?'Completed':'Not completed yet'}</span></div>`).join('')}
+  <button class="btn secondary small" onclick="viewComplaint('${c.id}')">View full action history</button>
+ </div>`;
+}
+function viewComplaint(cid){const c=complaints.find(x=>x.id===cid);if(!c)return;document.getElementById('modalRoot').innerHTML=`<div class="modal-backdrop" onclick="closeModal(event)"><div class="modal" onclick="event.stopPropagation()"><div class="row"><h2>${esc(c.title)}</h2><button class="btn secondary small" onclick="closeModal()">Close</button></div><p class="muted">${esc(c.id)} · ${esc(c.category)} · <span class="pill ${statusClass(c)}">${statusLabel(c)}</span></p><p>${esc(c.description)}</p><p class="muted">Location: ${esc(c.location)}<br>Department: ${esc(c.department)}<br>Assigned officer: ${esc(c.assignedTo)}<br>Deadline: ${esc(c.deadline)}<br>Created: ${esc(c.createdAt)}</p><h2>Action history</h2>${(c.history||[]).map(h=>`<div class="history-line"><b>${esc(h.message)}</b><span class="muted">${esc(h.at)}</span></div>`).join('')}</div></div>`}
+function closeModal(e){if(!e||e.target.classList.contains('modal-backdrop'))document.getElementById('modalRoot').innerHTML=''}
+function loadSample(){if(complaints.length&& !confirm('Add sample complaints to the existing records?'))return;const samples=[{title:'Damaged road near market',category:'Road maintenance',location:'Ward 4, Main Market',description:'Potholes are making travel difficult.',days:-1,status:'Pending',department:'Public Works',assignedTo:'Officer 01'},{title:'Irregular water supply',category:'Water supply',location:'Green Colony',description:'Water supply has been irregular for several days.',days:2,status:'In Progress',department:'Water Board',assignedTo:'Officer 02'},{title:'Street light not working',category:'Street lighting',location:'School Road',description:'Street light near the school is not functioning.',days:5,status:'Resolved',department:'Electrical',assignedTo:'Officer 03'}];samples.forEach(s=>{const d=new Date();d.setDate(d.getDate()+s.days);const c={id:id(),title:s.title,category:s.category,location:s.location,description:s.description,deadline:d.toISOString().slice(0,10),contact:'',status:s.status,department:s.department,assignedTo:s.assignedTo,escalated:false,overdueNotified:false,createdAt:new Date().toLocaleString(),history:[]};log(c,'Sample complaint created for demonstration.');if(s.status==='Resolved')log(c,'Complaint resolved by assigned officer.');complaints.push(c)});save();render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+document.getElementById('cDeadline').min=today();document.getElementById('cDeadline').value=today();
+</script>
+</body>
+</html>
